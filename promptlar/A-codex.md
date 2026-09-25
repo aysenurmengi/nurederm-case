@@ -28,3 +28,4 @@ Plan genel olarak uygun ama implementasyona geçmeden önce şu düzeltmeleri uy
 cevap-taslagi dönerken (veri kaynağında para birimi belirtilmiyor) ve Kargo durumu ve teslim tarihi bilgisine bu kaynaktan ulaşılamıyor. bilgisini müşteriye dönmemelisin, profesyonel görünmüyor. onun dışındaki tüm bilgiler aynı kalsın. 
 
 
+**Ayrıca Bölüm A'ya ait olan ReadMe yapay zeka aracı ile hazırlanmıştır.

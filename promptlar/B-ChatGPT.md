@@ -1,2 +1,4 @@
 Bölüm B için tek ve sıralı bir ana prompt kullanmadım. Önce n8n platformunun temel yapısını ve workflow mantığını araştırdım. Ardından uygun bir başlangıç şablonu seçtim ve akışı kendi planıma göre adım adım oluşturdum. Uygulama sırasında pagination, HTML extraction, Google Sheets, karşılaştırma mantığı, IF dalları ve e-posta bildirimleri gibi spesifik konularda parça parça yapay zekâ desteği aldım. Bu nedenle Bölüm B prompt geçmişi tek bir uzun prompt yerine, ihtiyaç oldukça sorulan kısa ve spesifik sorulardan oluşmaktadır.
 
+
+**Ayrıca, Bölüm B’ye ait akis-aciklama.md dosyasını hazırladıktan sonra ChatGPT ile gözden geçirip formatını iyileştirdim.
