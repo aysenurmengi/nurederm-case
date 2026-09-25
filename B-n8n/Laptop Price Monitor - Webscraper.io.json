@@ -1,0 +1,647 @@
+{
+  "name": "Laptop Price Monitor - Webscraper.io",
+  "nodes": [
+    {
+      "parameters": {
+        "rule": {
+          "interval": [
+            {
+              "triggerAtHour": 9
+            }
+          ]
+        }
+      },
+      "id": "646a8d10-7ded-4f80-aa17-86c53bddbc43",
+      "name": "Schedule Trigger",
+      "type": "n8n-nodes-base.scheduleTrigger",
+      "position": [
+        832,
+        352
+      ],
+      "typeVersion": 1.2
+    },
+    {
+      "parameters": {
+        "url": "={{$json.url}}",
+        "options": {}
+      },
+      "id": "cee99b2f-6d63-40dc-bbfc-d98dc6bd3449",
+      "name": "HTTP Request to product page",
+      "type": "n8n-nodes-base.httpRequest",
+      "position": [
+        1616,
+        96
+      ],
+      "typeVersion": 4.2,
+      "onError": "continueErrorOutput"
+    },
+    {
+      "parameters": {
+        "operation": "extractHtmlContent",
+        "extractionValues": {
+          "values": [
+            {
+              "key": "name",
+              "cssSelector": ".title",
+              "returnArray": true
+            },
+            {
+              "key": "price",
+              "cssSelector": ".price",
+              "returnArray": true
+            },
+            {
+              "key": "reviews",
+              "cssSelector": ".ratings .review-count",
+              "returnArray": true
+            },
+            {
+              "key": "link",
+              "cssSelector": ".title",
+              "returnValue": "attribute",
+              "attribute": "href",
+              "returnArray": true
+            }
+          ]
+        },
+        "options": {}
+      },
+      "id": "0b842eec-6f2d-4c62-ab00-403164951e64",
+      "name": "price extract from page",
+      "type": "n8n-nodes-base.html",
+      "position": [
+        1840,
+        96
+      ],
+      "typeVersion": 1.2
+    },
+    {
+      "parameters": {
+        "content": "## start at desired schedule\n### daily in this example",
+        "height": 280,
+        "width": 300
+      },
+      "id": "6c1fe1cd-56af-4c51-91b3-d5eaa9ce2948",
+      "name": "Sticky Note2",
+      "type": "n8n-nodes-base.stickyNote",
+      "position": [
+        672,
+        240
+      ],
+      "typeVersion": 1
+    },
+    {
+      "parameters": {
+        "content": "## get price from competitor's product page and convert into number\n",
+        "height": 300,
+        "width": 860
+      },
+      "id": "2a156baa-d3fc-4d73-8241-d6021ddf1514",
+      "name": "Sticky Note3",
+      "type": "n8n-nodes-base.stickyNote",
+      "position": [
+        1552,
+        -16
+      ],
+      "typeVersion": 1
+    },
+    {
+      "parameters": {
+        "jsCode": "const pages = [];\n\nfor (let i = 1; i <= 20; i++) {\n  pages.push({\n    json: {\n      page: i,\n      url: `https://webscraper.io/test-sites/e-commerce/static/computers/laptops?page=${i}`\n    }\n  });\n}\n\nreturn pages;"
+      },
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        1104,
+        352
+      ],
+      "id": "5dad6b21-74d1-4224-bc4b-878cddd0a5ee",
+      "name": "Generate Page URLs"
+    },
+    {
+      "parameters": {
+        "jsCode": "const output = [];\n\nfor (const item of $input.all()) {\n  const names = item.json.name || [];\n  const prices = item.json.price || [];\n  const reviews = item.json.reviews || [];\n  const links = item.json.link || [];\n\n  const count = Math.min(\n    names.length,\n    prices.length,\n    reviews.length,\n    links.length\n  );\n\n  for (let i = 0; i < count; i++) {\n    const price = Number(\n      String(prices[i]).replace(\"$\", \"\").trim()\n    );\n\n    const reviewMatch = String(reviews[i]).match(/\\d+/);\n    const reviewCount = reviewMatch ? Number(reviewMatch[0]) : 0;\n\n    const rawLink = links[i];\n    const fullLink = rawLink.startsWith(\"http\")\n      ? rawLink\n      : `https://webscraper.io${rawLink}`;\n\n    output.push({\n      json: {\n        name: String(names[i]).trim(),\n        price,\n        reviews: reviewCount,\n        link: fullLink\n      }\n    });\n  }\n}\n\nreturn output;"
+      },
+      "id": "cce7d4e7-98a5-4c70-b90f-007ee6402e94",
+      "name": "Normalize Products",
+      "type": "n8n-nodes-base.code",
+      "position": [
+        2048,
+        96
+      ],
+      "typeVersion": 2
+    },
+    {
+      "parameters": {
+        "documentId": {
+          "__rl": true,
+          "value": "1ftXRxYp1XdcgJTxykn57J31gNDIqcsd0JQy8ZxNwIPU",
+          "mode": "list",
+          "cachedResultName": "Laptop Price Monitor",
+          "cachedResultUrl": "https://docs.google.com/spreadsheets/d/1ftXRxYp1XdcgJTxykn57J31gNDIqcsd0JQy8ZxNwIPU/edit?usp=drivesdk"
+        },
+        "sheetName": {
+          "__rl": true,
+          "value": 922326235,
+          "mode": "list",
+          "cachedResultName": "latest_prices",
+          "cachedResultUrl": "https://docs.google.com/spreadsheets/d/1ftXRxYp1XdcgJTxykn57J31gNDIqcsd0JQy8ZxNwIPU/edit#gid=922326235"
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.googleSheets",
+      "typeVersion": 4.7,
+      "position": [
+        2272,
+        96
+      ],
+      "id": "c936ecf7-7eeb-48b6-a704-ba7b445a3882",
+      "name": "Read Latest Prices",
+      "executeOnce": true,
+      "alwaysOutputData": true,
+      "credentials": {
+        "googleSheetsOAuth2Api": {
+          "id": "RXm2ddfflKewXzKD",
+          "name": "Google Sheets account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "jsCode": "const currentProducts = $('Normalize Products').all();\nconst previousRows = $('Read Latest Prices').all();\n\nconst previousByLink = new Map();\n\nfor (const item of previousRows) {\n  const row = item.json;\n\n  if (row.link) {\n    previousByLink.set(row.link, row);\n  }\n}\n\nreturn currentProducts.map(item => {\n  const product = item.json;\n  const previous = previousByLink.get(product.link);\n\n  let status = 'unchanged';\n  let old_price = null;\n\n  if (!previous) {\n    status = 'new';\n  } else {\n    old_price = Number(previous.price);\n\n    if (old_price !== Number(product.price)) {\n      status = 'price_changed';\n    }\n  }\n\n  return {\n    json: {\n      ...product,\n      old_price,\n      status,\n      timestamp: new Date().toISOString()\n    }\n  };\n});"
+      },
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        2496,
+        96
+      ],
+      "id": "897afa48-627e-4509-ac60-fc8a57909502",
+      "name": "Compare Products"
+    },
+    {
+      "parameters": {
+        "operation": "append",
+        "documentId": {
+          "__rl": true,
+          "value": "1ftXRxYp1XdcgJTxykn57J31gNDIqcsd0JQy8ZxNwIPU",
+          "mode": "list",
+          "cachedResultName": "Laptop Price Monitor",
+          "cachedResultUrl": "https://docs.google.com/spreadsheets/d/1ftXRxYp1XdcgJTxykn57J31gNDIqcsd0JQy8ZxNwIPU/edit?usp=drivesdk"
+        },
+        "sheetName": {
+          "__rl": true,
+          "value": "gid=0",
+          "mode": "list",
+          "cachedResultName": "price_history",
+          "cachedResultUrl": "https://docs.google.com/spreadsheets/d/1ftXRxYp1XdcgJTxykn57J31gNDIqcsd0JQy8ZxNwIPU/edit#gid=0"
+        },
+        "columns": {
+          "mappingMode": "defineBelow",
+          "value": {
+            "name": "={{$json.name}}",
+            "price": "={{$json.price}}",
+            "reviews": "={{$json.reviews}}",
+            "link": "={{$json.link}}",
+            "timestamp": "={{$json.timestamp}}"
+          },
+          "matchingColumns": [],
+          "schema": [
+            {
+              "id": "timestamp",
+              "displayName": "timestamp",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "name",
+              "displayName": "name",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "price",
+              "displayName": "price",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "reviews",
+              "displayName": "reviews",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "link",
+              "displayName": "link",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            }
+          ],
+          "attemptToConvertTypes": false,
+          "convertFieldsToString": false
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.googleSheets",
+      "typeVersion": 4.7,
+      "position": [
+        3008,
+        96
+      ],
+      "id": "92047012-2fa1-4315-b7de-5fbeaeef8c1c",
+      "name": "Append Price History",
+      "credentials": {
+        "googleSheetsOAuth2Api": {
+          "id": "RXm2ddfflKewXzKD",
+          "name": "Google Sheets account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "conditions": {
+          "options": {
+            "caseSensitive": true,
+            "leftValue": "",
+            "typeValidation": "strict",
+            "version": 3
+          },
+          "conditions": [
+            {
+              "id": "364cfb8a-f9c1-47db-8cc8-ae930a41ce6c",
+              "leftValue": "={{$json.status}}",
+              "rightValue": "unchanged",
+              "operator": {
+                "type": "string",
+                "operation": "notEquals"
+              }
+            }
+          ],
+          "combinator": "and"
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.if",
+      "typeVersion": 2.3,
+      "position": [
+        2672,
+        304
+      ],
+      "id": "7865fa24-d621-4094-80cd-d6603f87daab",
+      "name": "New or Price Changed?"
+    },
+    {
+      "parameters": {
+        "fromEmail": "admin@example.com",
+        "toEmail": "info@example.com",
+        "subject": "Laptop price update",
+        "emailFormat": "text",
+        "text": "=Subject:\nLaptop price update\n\nBody:\nProduct: {{$json.name}}\nStatus: {{$json.status}}\nOld price: {{$json.old_price}}\nNew price: {{$json.price}}\nReviews: {{$json.reviews}}\nLink: {{$json.link}}",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.emailSend",
+      "typeVersion": 2.1,
+      "position": [
+        2960,
+        288
+      ],
+      "id": "36478add-a2c2-4852-b04d-fa1a880b5b1a",
+      "name": "Price Change Email",
+      "webhookId": "ee8a6c34-3062-4121-b86a-b85490ea4468"
+    },
+    {
+      "parameters": {
+        "operation": "appendOrUpdate",
+        "documentId": {
+          "__rl": true,
+          "value": "1ftXRxYp1XdcgJTxykn57J31gNDIqcsd0JQy8ZxNwIPU",
+          "mode": "list",
+          "cachedResultName": "Laptop Price Monitor",
+          "cachedResultUrl": "https://docs.google.com/spreadsheets/d/1ftXRxYp1XdcgJTxykn57J31gNDIqcsd0JQy8ZxNwIPU/edit?usp=drivesdk"
+        },
+        "sheetName": {
+          "__rl": true,
+          "value": 922326235,
+          "mode": "list",
+          "cachedResultName": "latest_prices",
+          "cachedResultUrl": "https://docs.google.com/spreadsheets/d/1ftXRxYp1XdcgJTxykn57J31gNDIqcsd0JQy8ZxNwIPU/edit#gid=922326235"
+        },
+        "columns": {
+          "mappingMode": "defineBelow",
+          "value": {
+            "name": "={{$json.name}}",
+            "price": "={{$json.price}}",
+            "reviews": "={{$json.reviews}}",
+            "updated_at": "={{$json.timestamp}}",
+            "link": "={{$json.link}}"
+          },
+          "matchingColumns": [
+            "link"
+          ],
+          "schema": [
+            {
+              "id": "name",
+              "displayName": "name",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "price",
+              "displayName": "price",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "reviews",
+              "displayName": "reviews",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "link",
+              "displayName": "link",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": false
+            },
+            {
+              "id": "updated_at",
+              "displayName": "updated_at",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            }
+          ],
+          "attemptToConvertTypes": false,
+          "convertFieldsToString": false
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.googleSheets",
+      "typeVersion": 4.7,
+      "position": [
+        2672,
+        -80
+      ],
+      "id": "780c8dd9-fe18-4328-914e-63c47ecae23f",
+      "name": "Update Latest Prices",
+      "credentials": {
+        "googleSheetsOAuth2Api": {
+          "id": "RXm2ddfflKewXzKD",
+          "name": "Google Sheets account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "jsCode": "const items = $input.all();\n\nlet productCount = 0;\n\nfor (const item of items) {\n  const names = item.json.name || [];\n  productCount += names.length;\n}\n\nreturn [{\n  json: {\n    productCount,\n    scrapingOk: productCount > 0\n  }\n}];"
+      },
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        2096,
+        368
+      ],
+      "id": "418a5ca0-1016-4b75-9dcf-0084a8295f78",
+      "name": "Check Scrape Result"
+    },
+    {
+      "parameters": {
+        "conditions": {
+          "options": {
+            "caseSensitive": true,
+            "leftValue": "",
+            "typeValidation": "strict",
+            "version": 3
+          },
+          "conditions": [
+            {
+              "id": "d56f830d-e60e-4644-b917-1261ca50db98",
+              "leftValue": "={{$json.scrapingOk}}",
+              "rightValue": "true",
+              "operator": {
+                "type": "boolean",
+                "operation": "true",
+                "singleValue": true
+              }
+            }
+          ],
+          "combinator": "and"
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.if",
+      "typeVersion": 2.3,
+      "position": [
+        2288,
+        368
+      ],
+      "id": "dd483751-d10b-4c8a-9054-c3f1cd168e39",
+      "name": "Products Found?"
+    },
+    {
+      "parameters": {
+        "fromEmail": "admin@example.com",
+        "toEmail": "info@example.com",
+        "subject": "Laptop scraping workflow error",
+        "emailFormat": "text",
+        "text": "The workflow completed without extracting any laptop products.\nPlease check the source site or HTML selectors.",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.emailSend",
+      "typeVersion": 2.1,
+      "position": [
+        2320,
+        656
+      ],
+      "id": "95fed650-eb08-463b-9f08-aa3d1b63e846",
+      "name": "Scraping Error Email",
+      "webhookId": "f3f98e3d-2c45-4d04-b986-323c40f49685"
+    }
+  ],
+  "pinData": {},
+  "connections": {
+    "Schedule Trigger": {
+      "main": [
+        [
+          {
+            "node": "Generate Page URLs",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "price extract from page": {
+      "main": [
+        [
+          {
+            "node": "Normalize Products",
+            "type": "main",
+            "index": 0
+          },
+          {
+            "node": "Check Scrape Result",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "HTTP Request to product page": {
+      "main": [
+        [
+          {
+            "node": "price extract from page",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "Scraping Error Email",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Generate Page URLs": {
+      "main": [
+        [
+          {
+            "node": "HTTP Request to product page",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Normalize Products": {
+      "main": [
+        [
+          {
+            "node": "Read Latest Prices",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Read Latest Prices": {
+      "main": [
+        [
+          {
+            "node": "Compare Products",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Compare Products": {
+      "main": [
+        [
+          {
+            "node": "Append Price History",
+            "type": "main",
+            "index": 0
+          },
+          {
+            "node": "New or Price Changed?",
+            "type": "main",
+            "index": 0
+          },
+          {
+            "node": "Update Latest Prices",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Append Price History": {
+      "main": [
+        []
+      ]
+    },
+    "New or Price Changed?": {
+      "main": [
+        [
+          {
+            "node": "Price Change Email",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Check Scrape Result": {
+      "main": [
+        [
+          {
+            "node": "Products Found?",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Products Found?": {
+      "main": [
+        [],
+        [
+          {
+            "node": "Scraping Error Email",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    }
+  },
+  "active": false,
+  "settings": {
+    "executionOrder": "v1",
+    "binaryMode": "separate"
+  },
+  "versionId": "43d0b46d-7a94-4355-b894-7718330ee91b",
+  "meta": {
+    "templateId": "6179",
+    "templateCredsSetupCompleted": true,
+    "instanceId": "13827f37210901908c884816e9f5ff45fc1e0dec4dcb28a7be0f8bc3ce80196a"
+  },
+  "nodeGroups": [],
+  "id": "wfQUqbROFZL1c4SV",
+  "tags": []
+}

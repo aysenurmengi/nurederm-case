@@ -1,0 +1,107 @@
+[
+  {
+    "id": 1,
+    "konu": "siparis-durumu",
+    "devret": true,
+    "cevap_taslagi": "Bu siparişin hesabınıza ait olduğunu doğrulayamadım. Talebinizi müşteri temsilcisine yönlendiriyorum.",
+    "not": "Sipariş sahipliği eşleşmedi; sipariş ayrıntısı paylaşılmadı."
+  },
+  {
+    "id": 2,
+    "konu": "siparis-durumu",
+    "devret": false,
+    "cevap_taslagi": "Siparişinizdeki ürünler: Samsung Galaxy Tab White, Soft Drinks, Powder Canister. Toplam tutar: 1467.88.",
+    "not": "Sahiplik doğrulandı; ürün adları ve total kullanıldı. Kargo bilgisi üretilmedi."
+  },
+  {
+    "id": 3,
+    "konu": "siparis-durumu",
+    "devret": false,
+    "cevap_taslagi": "Bu numarayla sipariş bulunamadı. Lütfen sipariş numaranızı kontrol edip tekrar paylaşın.",
+    "not": "API siparişin bulunamadığını doğruladı."
+  },
+  {
+    "id": 4,
+    "konu": "istenmeyen-etki",
+    "devret": true,
+    "cevap_taslagi": "Talebinizi incelemesi için müşteri temsilcisine yönlendiriyorum.",
+    "not": "Hassas içerik: istenmeyen-etki; yalnızca temsilciye yönlendirme."
+  },
+  {
+    "id": 5,
+    "konu": "iade-sikayet",
+    "devret": true,
+    "cevap_taslagi": "Talebinizi incelemesi için müşteri temsilcisine yönlendiriyorum.",
+    "not": "Hassas içerik: iade-sikayet; yalnızca temsilciye yönlendirme."
+  },
+  {
+    "id": 6,
+    "konu": "siparis-durumu",
+    "devret": false,
+    "cevap_taslagi": "Your order contains: Fish Steak, iPhone 13 Pro, Realme X, Man Short Sleeve Shirt, Dior J'adore, Party Glasses. Total: 1794.85.",
+    "not": "Sahiplik doğrulandı; ürün adları ve total kullanıldı. Kargo bilgisi üretilmedi."
+  },
+  {
+    "id": 7,
+    "konu": "diger",
+    "devret": false,
+    "cevap_taslagi": "",
+    "not": "İstenmeyen tanıtım mesajı; yanıt taslağı oluşturulmadı, bağlantı açılmadı."
+  },
+  {
+    "id": 8,
+    "konu": "siparis-durumu",
+    "devret": false,
+    "cevap_taslagi": "Siparişinizdeki ürünler: Sports Sneakers Off White Red, Dior J'adore. Toplam tutar: 689.93.",
+    "not": "Sahiplik doğrulandı; ürün adları ve total kullanıldı. Kargo bilgisi üretilmedi."
+  },
+  {
+    "id": 9,
+    "konu": "urun-sorusu",
+    "devret": false,
+    "cevap_taslagi": "Doğrulanmış ürün bilgisine erişimim olmadığı için stok, içerik, kullanım uygunluğu veya marka politikası hakkında kesin bilgi veremiyorum. İlgilendiğiniz ürünün tam adını veya bağlantısını paylaşabilir misiniz?",
+    "not": "Doğrulanmış ürün verisi yok; bilgi veya öneri üretilmedi, otomatik devir yapılmadı."
+  },
+  {
+    "id": 10,
+    "konu": "fiyat",
+    "devret": false,
+    "cevap_taslagi": "Doğrulanmış güncel fiyat ve kampanya bilgisine erişimim yok. Bu nedenle bir tutar veya indirim kodu paylaşamıyorum. İlgilendiğiniz ürünün tam adını veya bağlantısını paylaşabilir misiniz?",
+    "not": "Doğrulanmış fiyat verisi yok; tutar veya kampanya uydurulmadı, otomatik devir yapılmadı."
+  },
+  {
+    "id": 11,
+    "konu": "urun-sorusu",
+    "devret": false,
+    "cevap_taslagi": "Doğrulanmış ürün bilgisine erişimim olmadığı için stok, içerik, kullanım uygunluğu veya marka politikası hakkında kesin bilgi veremiyorum. İlgilendiğiniz ürünün tam adını veya bağlantısını paylaşabilir misiniz?",
+    "not": "Doğrulanmış ürün verisi yok; bilgi veya öneri üretilmedi, otomatik devir yapılmadı."
+  },
+  {
+    "id": 12,
+    "konu": "diger",
+    "devret": false,
+    "cevap_taslagi": "Kullanılan kargo firması hakkında doğrulanmış bilgim bulunmuyor. Siparişinize özel bilgi için sipariş numaranızı paylaşabilir misiniz?",
+    "not": "Genel kargo politikası sorusu; belirli bir sipariş durumu sorgusu değil."
+  },
+  {
+    "id": 13,
+    "konu": "urun-sorusu",
+    "devret": false,
+    "cevap_taslagi": "Doğrulanmış ürün bilgisine erişimim olmadığı için stok, içerik, kullanım uygunluğu veya marka politikası hakkında kesin bilgi veremiyorum. İlgilendiğiniz ürünün tam adını veya bağlantısını paylaşabilir misiniz?",
+    "not": "Doğrulanmış ürün verisi yok; bilgi veya öneri üretilmedi, otomatik devir yapılmadı."
+  },
+  {
+    "id": 14,
+    "konu": "fiyat",
+    "devret": false,
+    "cevap_taslagi": "Doğrulanmış güncel fiyat ve kampanya bilgisine erişimim yok. Bu nedenle bir tutar veya indirim kodu paylaşamıyorum. İlgilendiğiniz ürünün tam adını veya bağlantısını paylaşabilir misiniz?",
+    "not": "Doğrulanmış fiyat verisi yok; tutar veya kampanya uydurulmadı, otomatik devir yapılmadı."
+  },
+  {
+    "id": 15,
+    "konu": "urun-sorusu",
+    "devret": false,
+    "cevap_taslagi": "Doğrulanmış ürün bilgisine erişimim olmadığı için stok, içerik, kullanım uygunluğu veya marka politikası hakkında kesin bilgi veremiyorum. İlgilendiğiniz ürünün tam adını veya bağlantısını paylaşabilir misiniz?",
+    "not": "Doğrulanmış ürün verisi yok; bilgi veya öneri üretilmedi, otomatik devir yapılmadı."
+  }
+]
